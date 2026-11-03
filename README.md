@@ -4,14 +4,24 @@
 [![Code](https://img.shields.io/badge/Code-GitHub-%23F2806B.svg)](https://github.com/ChengshuaiZhao0/TextCloak)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-%233776AB.svg?logo=python&logoColor=white)](https://www.python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11-%23EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org)
-[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-Datasets%20%26%20Models-%23FFD21E.svg)](https://huggingface.co)
 [![License](https://img.shields.io/badge/License-MIT-%2343B02A.svg)](LICENSE)
 
 This repository contains the official Python implementation of **TextCloak**, the framework described in the paper **[TextCloak: Safeguarding Data from Unauthorized LLM Fine-Tuning via RL-Driven Unlearnable Examples](https://arxiv.org/abs/2607.28862)**.
 
+## 📰 News
+
+- **[11/02/2026]** Code release! The TextCloak implementation is now available in this repository.
+- **[07/30/2026]** Paper available on [arXiv](https://arxiv.org/abs/2607.28862).
+
 ## 🔭 Introduction
 
-TextCloak is an RL-driven data synthesis framework that safeguards textual data against unauthorized LLM fine-tuning. A UE generative policy rewrites clean text into unlearnable examples (UEs) that preserve semantic fidelity and linguistic naturalness, so the text stays useful to people while LLMs fine-tuned on it derive little benefit. The policy is optimized with GRPO-UE, which simulates the attacker's fine-tuning on a surrogate LLM and rewards downstream degradation via group-relative policy optimization.
+The development of Large Language Models (LLMs) has led to significant advances across a wide range of language tasks, while simultaneously raising growing concerns about unauthorized online data exploitation and privacy leakage. Unlearnable examples (UEs) emerge as a promising defense by injecting crafted perturbations into data such that models trained on them exhibit degraded utility. However, existing methods for text protection are primarily designed for classification tasks and discriminative language models, which limits their broad applicability (e.g., instruction following or reasoning) in LLMs. In this work, we propose **TextCloak**, an RL-driven data synthesis framework that safeguards textual data against unauthorized LLM fine-tuning. TextCloak employs a *UE generative policy* that transforms clean text into unlearnable examples while preserving semantic fidelity and linguistic naturalness. To optimize the policy, we introduce **GRPO-UE**, which simulates the attacker's LLM fine-tuning and rewards downstream degradation via group-relative policy optimization. This overall formulates a bi-level optimization loop, allowing the generator to discover effective protective patterns. Comprehensive experiments on six publicly available datasets and nine state-of-the-art LLMs demonstrate that TextCloak consistently impairs unauthorized LLM fine-tuning while maintaining text utility for legitimate use. Further analyses confirm its transferability and robustness across model architectures, training configurations, and adaptive attacks, highlighting its broad applicability as a practical defense for online content.
+
+<p align="center">
+  <img src="figure/illustration.png" alt="Illustration of Unlearnable Examples for LLMs" width="60%">
+  <br>
+  <em>Figure 1:</em> Illustration of Unlearnable Examples for LLMs.
+</p>
 
 ## ✨ Highlights
 
@@ -23,6 +33,12 @@ TextCloak is an RL-driven data synthesis framework that safeguards textual data 
 
 ⭐ **Comprehensive evaluation.** Effectiveness, transferability, robustness and stealthiness across various datasets and state-of-the-art LLMs.
 
+<p align="center">
+  <img src="figure/framework.png" alt="Overview of TextCloak" width="100%">
+  <br>
+  <em>Figure 2:</em> Overview of the proposed TextCloak.
+</p>
+
 ## 🗂️ Repository Layout
 
 ```text
@@ -32,6 +48,8 @@ TextCloak/
 │   ├── _base.yaml            shared defaults (models, GRPO, rewards, fine-tuning)
 │   ├── arc.yaml              ARC-Challenge
 │   └── medqa.yaml            MedQA-USMLE
+│
+├── figure/                   figures used in this README
 │
 ├── scripts/
 │   ├── download.py           fetch the datasets and models from the Hugging Face Hub
