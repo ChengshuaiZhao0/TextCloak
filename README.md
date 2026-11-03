@@ -15,13 +15,23 @@ This repository contains the official Python implementation of **TextCloak**, th
 
 ## 🔭 Introduction
 
-The development of Large Language Models (LLMs) has led to significant advances across a wide range of language tasks, while simultaneously raising growing concerns about unauthorized online data exploitation and privacy leakage. Unlearnable examples (UEs) emerge as a promising defense by injecting crafted perturbations into data such that models trained on them exhibit degraded utility. However, existing methods for text protection are primarily designed for classification tasks and discriminative language models, which limits their broad applicability (e.g., instruction following or reasoning) in LLMs. In this work, we propose **TextCloak**, an RL-driven data synthesis framework that safeguards textual data against unauthorized LLM fine-tuning. TextCloak employs a *UE generative policy* that transforms clean text into unlearnable examples while preserving semantic fidelity and linguistic naturalness. To optimize the policy, we introduce **GRPO-UE**, which simulates the attacker's LLM fine-tuning and rewards downstream degradation via group-relative policy optimization. This overall formulates a bi-level optimization loop, allowing the generator to discover effective protective patterns. Comprehensive experiments on six publicly available datasets and nine state-of-the-art LLMs demonstrate that TextCloak consistently impairs unauthorized LLM fine-tuning while maintaining text utility for legitimate use. Further analyses confirm its transferability and robustness across model architectures, training configurations, and adaptive attacks, highlighting its broad applicability as a practical defense for online content.
+The development of Large Language Models (LLMs) has led to significant advances across a wide range of language tasks, while simultaneously raising growing concerns about unauthorized online data exploitation and privacy leakage. Unlearnable examples (UEs) emerge as a promising defense by injecting crafted perturbations into data such that models trained on them exhibit degraded utility. However, existing methods for text protection are primarily designed for classification tasks and discriminative language models, which limits their broad applicability (e.g., instruction following or reasoning) in LLMs.
 
 <p align="center">
   <img src="figure/illustration.png" alt="Illustration of Unlearnable Examples for LLMs" width="60%">
   <br>
   <em>Figure 1:</em> Illustration of Unlearnable Examples for LLMs.
 </p>
+
+In this work, we propose **TextCloak**, an RL-driven data synthesis framework that safeguards textual data against unauthorized LLM fine-tuning. TextCloak employs a *UE generative policy* that transforms clean text into unlearnable examples while preserving semantic fidelity and linguistic naturalness. To optimize the policy, we introduce **GRPO-UE**, which simulates the attacker's LLM fine-tuning and rewards downstream degradation via group-relative policy optimization. This overall formulates a bi-level optimization loop, allowing the generator to discover effective protective patterns.
+
+<p align="center">
+  <img src="figure/framework.png" alt="Overview of TextCloak" width="100%">
+  <br>
+  <em>Figure 2:</em> Overview of the proposed TextCloak.
+</p>
+
+Comprehensive experiments on six publicly available datasets and nine state-of-the-art LLMs demonstrate that TextCloak consistently impairs unauthorized LLM fine-tuning while maintaining text utility for legitimate use. Further analyses confirm its transferability and robustness across model architectures, training configurations, and adaptive attacks, highlighting its broad applicability as a practical defense for online content.
 
 ## ✨ Highlights
 
@@ -32,12 +42,6 @@ The development of Large Language Models (LLMs) has led to significant advances 
 ⭐ **Optimization mechanism.** GRPO-UE simulates unauthorized LLM fine-tuning and measures protection through downstream degradation, guiding the generative policy toward effective unlearnable patterns.
 
 ⭐ **Comprehensive evaluation.** Effectiveness, transferability, robustness and stealthiness across various datasets and state-of-the-art LLMs.
-
-<p align="center">
-  <img src="figure/framework.png" alt="Overview of TextCloak" width="100%">
-  <br>
-  <em>Figure 2:</em> Overview of the proposed TextCloak.
-</p>
 
 ## 🗂️ Repository Layout
 
