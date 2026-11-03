@@ -1,0 +1,3 @@
+# ARC-Challenge: 4-option science questions
+_base_: _base.yaml
+dataset: {name: arc, max_length: 256}

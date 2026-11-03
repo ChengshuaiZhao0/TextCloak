@@ -1,0 +1,53 @@
+# Settings shared by every dataset (each configs/<dataset>.yaml overrides some).
+# Any key can be overridden on the command line, e.g. --run.seed=43 --protect.lambda_sem=0.
+
+run:
+  seed: 42
+  output_dir: outputs/{dataset}/seed{seed}   # protect.log, generator/, protected.{pt,jsonl}, finetune_*.log, results_*.json
+  logging_interval: 10           # Stage 1: log every N GRPO steps
+
+model:
+  generator: meta-llama/Meta-Llama-3-8B   # G, the rewriter trained with GRPO
+  surrogate: Qwen/Qwen3-8B                # T, the target G is trained against (Stage 1)
+  target: Qwen/Qwen3-8B                   # the model fine-tuned and tested in Stage 3
+  dtype: bf16
+  lora: {rank: 8, alpha: 32, dropout: 0.05}   # every LoRA (G, T, Stage 3), all linear layers
+
+dataset:
+  num_workers: 4
+  limit_train: 0                 # >0: use only the first N samples (quick tests)
+  limit_valid: 0
+  limit_test: 0
+
+protect:                         # Stages 1 (train G) and 2 (protect the data)
+  n_epochs: 2
+  batch_size: 8                  # B: samples per G prompt and per T step
+  group_size: 4                  # K: candidates per prompt (the GRPO group)
+  clip_eps: 0.2
+  lr_generator: 1.0e-5           # AdamW, weight decay 1e-4
+  lr_surrogate: 2.0e-5           # AdamW, cosine decay over the epochs
+  weight_decay_surrogate: 0.001
+  lr_min_surrogate: 2.0e-7
+  tau_start: 1.0                 # G's sampling temperature, linear from tau_start to tau_end
+  tau_end: 0.5                   # over the epochs; conversion samples at max(tau_end, 0.3)
+  lambda_d: 1.0                  # reward r = lambda_d*d - lambda_sem*[tau_sem - S_sem]_+ - lambda_ppl*[tau_ppl - S_ppl]_+
+  lambda_sem: 1.0
+  lambda_ppl: 1.0
+  tau_sem: 0.9
+  tau_ppl: 0.9
+  max_new_tokens: 0              # G's output budget; 0: 30*B*gen_budget_ratio + 100, at most 512
+  gen_budget_ratio: 1.5
+  convert_batch_size: 8          # B used when protecting the training set
+  strict_parse: 1                # conversion: retry samples G failed to rewrite (twice in a smaller batch, then alone)
+  engine: vllm                   # conversion with vllm or hf (same prompts, sampling and parsing)
+  save_generator: 1              # keep G's LoRA in <output_dir>/generator
+  generator_path: null           # start from a saved G (with --protect.n_epochs=0: only convert)
+
+finetune:                        # Stage 3 (fine-tune model.target, test it)
+  n_epochs: 5
+  batch_size: 8
+  lr: 2.0e-5                     # AdamW, cosine decay over the epochs
+  weight_decay: 0.001
+  lr_min: 2.0e-7
+  logging_interval: 200
+  eval_engine: vllm              # vllm or hf (HF generate)

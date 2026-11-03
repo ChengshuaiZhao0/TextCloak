@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "textcloak"
+version = "0.1.0"
+description = "TextCloak: safeguarding data from unauthorized LLM fine-tuning via RL-driven unlearnable examples"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+# The versions the reported results were produced with.
+dependencies = [
+    "torch==2.11.0",
+    "vllm==0.20.2",
+    "transformers==5.13.0",
+    "peft==0.18.1",
+    "accelerate==1.12.0",
+    "datasets==4.5.0",
+    "sentence-transformers==5.2.0",
+    "safetensors",
+    "pyyaml",
+    "numpy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+]
+
+[tool.setuptools.packages.find]
+include = ["textcloak*"]

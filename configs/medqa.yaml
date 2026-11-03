@@ -1,0 +1,7 @@
+# MedQA-USMLE: 4-option clinical vignettes (long stems)
+_base_: _base.yaml
+dataset:
+  name: medqa
+  max_length: 512
+  args: {val_split_ratio: 0.1, max_train_samples: 1200}
+protect: {batch_size: 4, max_new_tokens: 1024}
